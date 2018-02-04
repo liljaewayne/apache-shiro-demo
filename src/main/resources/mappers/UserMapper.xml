@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
-<mapper>
+<mapper namespace="com.foo.apacheshirodemo.mapper.UserMapper">
     <resultMap id="userMap" type="com.foo.apacheshirodemo.model.User">
         <id property="uid" column="uid"></id>
         <result property="username" column="username"></result>
@@ -19,8 +19,14 @@
         </collection>
 
     </resultMap>
-    
+
     <select id="findByUsername" parameterType="string" resultMap="userMap">
-        
+        SELECT u.*,r.*,p.* 
+        FROM `user` u 
+          INNER JOIN user_role ur on u.uid=ur.uid
+          INNER JOIN role r on r.rid=ur.rid
+          INNER JOIN permission_role pr on pr.rid=r.rid
+          INNER JOIN permission p on pr.pid=p.pid
+        WHERE u.username=#{username}
     </select>
 </mapper>
